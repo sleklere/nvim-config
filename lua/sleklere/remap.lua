@@ -16,3 +16,6 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 -- when searching
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
+
+-- start replacing selection
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
