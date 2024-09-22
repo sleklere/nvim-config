@@ -1,6 +1,17 @@
 require("sleklere.remap")
 require("sleklere.set")
 if not vim.g.vscode then
+
+    -- disable netrw at the very start of your init.lua
+    --vim.g.loaded_netrw = 1
+    --vim.g.loaded_netrwPlugin = 1
+
+    -- optionally enable 24-bit colour
+    --vim.opt.termguicolors = true
+
+    -- empty setup using defaults
+    --require("nvim-tree").setup()
+
     require("sleklere.lazy_init")
 
     vim.g.netrw_browse_split = 0
