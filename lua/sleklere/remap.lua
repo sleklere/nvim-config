@@ -1,3 +1,4 @@
+local opts = { noremap = true, silent = true }
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
@@ -32,4 +33,13 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 
 
 -- nvim tree
-vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', {noremap = true, silent = true})
+vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', opts)
+vim.keymap.set('n', '<C-h>', '<C-w>h', opts)
+vim.keymap.set('n', '<C-j>', '<C-w>j', opts)
+vim.keymap.set('n', '<C-k>', '<C-w>k', opts)
+vim.keymap.set('n', '<C-l>', '<C-w>l', opts)
+
+-- navigate buffers
+local keymap = vim.api.nvim_set_keymap
+keymap('n', '<S-l>', ':bnext<CR>', opts)
+keymap('n', '<S-h>', ':bprevious<CR>', opts)
