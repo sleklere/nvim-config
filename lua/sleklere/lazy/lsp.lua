@@ -29,6 +29,7 @@ return {
                 "lua_ls",
                 "rust_analyzer",
                 "gopls",
+                "eslint",
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -65,6 +66,23 @@ return {
                                 }
                             }
                         }
+                    }
+                end,
+
+                -- Configuración personalizada para ESLint
+                ["eslint"] = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.eslint.setup {
+                        capabilities = capabilities,
+                        on_attach = function(client, bufnr)
+                            print("config eslint")
+                            client.server_capabilities.document_formatting = true
+                            vim.api.nvim_command [[autocmd BufWritePre <buffer> EslintFixAll]]
+                        end,
+                        settings = {
+                            validate = "on",
+                            packageManager = "npm"
+                        },
                     }
                 end,
             }
