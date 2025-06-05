@@ -112,7 +112,15 @@ return {
         })
 
         vim.diagnostic.config({
-            -- update_in_insert = true,
+            virtual_text = {
+                prefix = '●', -- un ícono o caracter antes del mensaje (podés usar "" o "●" o ">>")
+                spacing = 2, -- espacio entre texto y código
+                source = "if_many", -- muestra la fuente si hay más de un LSP activo
+            },
+            signs = true,
+            underline = true,
+            update_in_insert = false,
+            severity_sort = true,
             float = {
                 focusable = false,
                 style = "minimal",
@@ -121,6 +129,5 @@ return {
                 header = "",
                 prefix = "",
             },
-        })
-    end
+        })    end
 }
