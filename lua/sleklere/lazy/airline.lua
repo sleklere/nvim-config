@@ -5,6 +5,7 @@ return {
     -- Aquí puedes agregar la configuración de vim-airline
     vim.g.airline_powerline_fonts = 1
     vim.o.laststatus = 2
+    vim.g.airline_section_z = ''
   end
 }
 

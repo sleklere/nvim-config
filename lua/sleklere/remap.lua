@@ -3,7 +3,7 @@ vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 -- copy without losing what you pasted
-vim.keymap.set("x", "<leader>p", "\"_dP")
+vim.keymap.set("x", "p", "\"_dP")
 
 -- delete without cutting by default, and <leader>d for cutting
 -- right now, D deletes to the end of the line without cutting, and dd remains unaltered
