@@ -9,7 +9,31 @@ end
 return {
 
     {
-        "erikbackman/brightburn.vim",
+        "catppuccin/nvim",
+        name = "catppuccin",
+        priority = 1000,
+        config = function()
+            require("catppuccin").setup({
+                flavour = "macchiato",
+                background = { light = "latte", dark = "macchiato" },
+                transparent_background = false,
+                term_colors = true,
+                integrations = {
+                    cmp = true,
+                    gitsigns = true,
+                    nvimtree = true,
+                    telescope = true,
+                    treesitter = true,
+                    notify = true,
+                    mini = true,
+                    lsp_trouble = true,
+                    which_key = true,
+                    indent_blankline = { enabled = true },
+                    markdown = true,
+                },
+            })
+            ColorMyPencils()
+        end,
     },
 
     {
