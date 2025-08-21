@@ -85,6 +85,21 @@ return {
                         },
                     }
                 end,
+
+                -- specific handler for gopls (replaces default)
+                ["gopls"] = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.gopls.setup({
+                        capabilities = capabilities,
+                        settings = {
+                            gopls = {
+                                gofumpt = true,          -- more strict format (optional)
+                                analyses = { unusedparams = true },
+                                staticcheck = true,
+                            },
+                        },
+                    })
+                end,
             }
         })
 
@@ -107,8 +122,8 @@ return {
                 { name = 'nvim_lsp' },
                 { name = 'luasnip' }, -- For luasnip users.
             }, {
-                { name = 'buffer' },
-            })
+                    { name = 'buffer' },
+                })
         })
 
         vim.diagnostic.config({
@@ -129,5 +144,20 @@ return {
                 header = "",
                 prefix = "",
             },
-        })    end
+        })
+
+        -- === mappings/autocmds for Go ===
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = "go",
+            callback = function(args)
+                -- '=' formats with LSP (gopls). to preserve identation '=', use another mapping (e.g. <leader>=)
+                vim.keymap.set("n", "=", function() vim.lsp.buf.format({ async = false }) end, { buffer = args.buf })
+                vim.keymap.set("v", "=", function() vim.lsp.buf.format({ async = false }) end, { buffer = args.buf })
+
+                -- gq uses LSP range formatting (optional)
+                vim.bo[args.buf].formatexpr = "v:lua.vim.lsp.formatexpr()"
+            end,
+        })
+    end,
 }
+
