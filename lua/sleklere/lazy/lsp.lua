@@ -14,6 +14,9 @@ return {
     },
 
     config = function()
+        -- lombok para jdtls (leído en runtime por lsp/jdtls.lua)
+        vim.env.JDTLS_JVM_ARGS = "-javaagent:" .. vim.fn.stdpath("data") .. "/mason/packages/jdtls/lombok.jar"
+
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
         local capabilities = vim.tbl_deep_extend(
@@ -30,6 +33,8 @@ return {
                 "rust_analyzer",
                 "gopls",
                 "eslint",
+                "ts_ls",
+                "jdtls",
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -74,16 +79,25 @@ return {
                     local lspconfig = require("lspconfig")
                     lspconfig.eslint.setup {
                         capabilities = capabilities,
+
                         on_attach = function(client, bufnr)
-                            print("config eslint")
-                            client.server_capabilities.document_formatting = true
-                            vim.api.nvim_command [[autocmd BufWritePre <buffer> EslintFixAll]]
+                          -- fixAll de eslint al guardar (sincrónico)
+                          vim.api.nvim_create_autocmd("BufWritePre", {
+                            buffer = bufnr,
+                            command = "EslintFixAll",
+                          })
                         end,
                         settings = {
                             validate = "on",
                             packageManager = "npm"
                         },
                     }
+                end,
+
+                ["jdtls"] = function()
+                    require("lspconfig").jdtls.setup({
+                        capabilities = capabilities,
+                    })
                 end,
 
                 -- specific handler for gopls (replaces default)
