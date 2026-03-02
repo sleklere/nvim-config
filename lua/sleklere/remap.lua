@@ -45,8 +45,4 @@ keymap('n', '<S-l>', ':bnext<CR>', opts)
 keymap('n', '<S-h>', ':bprevious<CR>', opts)
 
 
--- format
--- vim.keymap.set('n', '<leader>f', ':lua vim.lsp.buf.format()', opts)
-vim.keymap.set("n", "<leader>f", function()
-  vim.lsp.buf.format()
-end, { desc = "Format with LSP" })
+-- format: defined in lazy/conform.lua
