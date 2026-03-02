@@ -1,14 +1,25 @@
 return {
     "nvim-telescope/telescope.nvim",
 
-    tag = "0.1.5",
+    branch = "0.1.x",
 
     dependencies = {
         "nvim-lua/plenary.nvim"
     },
 
     config = function()
-        require('telescope').setup({})
+        require('telescope').setup({
+            defaults = {
+                path_display = function(_, path)
+                    local tail = require("telescope.utils").path_tail(path)
+                    local dir = vim.fn.fnamemodify(path, ":h")
+                    if dir == "." then
+                        return tail
+                    end
+                    return string.format("%s  ·  %s", tail, dir)
+                end,
+            },
+        })
 
         local builtin = require('telescope.builtin')
         vim.keymap.set('n', '<C-p>', function()
