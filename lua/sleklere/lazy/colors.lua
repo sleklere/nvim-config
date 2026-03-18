@@ -1,5 +1,5 @@
 function ColorMyPencils(color)
-	color = color or "catppuccin"
+	color = color or "nord"
 	vim.cmd.colorscheme(color)
 
 	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
@@ -109,5 +109,25 @@ return {
         end
     },
 
+    {
+        "shaunsingh/nord.nvim",
+        name = "nord",
+        config = function()
+            vim.g.nord_disable_background = true
+            vim.g.nord_italic = false
+        end
+    },
+
+    {
+        "neanias/everforest-nvim",
+        name = "everforest",
+        config = function()
+            require("everforest").setup({
+                background = "hard",
+                transparent_background_level = 2,
+                italics = false,
+            })
+        end
+    },
 
 }
