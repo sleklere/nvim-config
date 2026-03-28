@@ -57,6 +57,10 @@ if not vim.g.vscode then
     autocmd('LspAttach', {
         group = sleklere_group,
         callback = function(e)
+            local client = vim.lsp.get_client_by_id(e.data.client_id)
+            if client and client.server_capabilities.documentSymbolProvider then
+                require("nvim-navic").attach(client, e.buf)
+            end
             local opts = { buffer = e.buf }
             vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
             vim.keymap.set("n", "gr", function() vim.lsp.buf.references() end, opts)
