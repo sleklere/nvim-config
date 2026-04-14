@@ -8,11 +8,6 @@ local root = util.root_pattern("gradlew", "mvnw", "pom.xml", ".git")(vim.fn.expa
             or vim.loop.cwd()
 local ws = vim.fn.stdpath("cache") .. "/jdtls/workspace/" .. vim.fn.fnamemodify(root, ":p:h:t")
 
--- Mata cualquier jdtls previo para este root
-for _, c in ipairs(vim.lsp.get_active_clients({ name = "jdtls" })) do
-  if c.config.root_dir == root then c.stop(true) end
-end
-
 local cmd = {
   jdtls_bin,
   "-configuration", config_dir,
