@@ -2,8 +2,20 @@ function ColorMyPencils(color)
 	color = color or "rose-pine"
 	vim.cmd.colorscheme(color)
 
-	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+	local transparent = {
+		"Normal", "NormalFloat", "NormalNC",
+		"FloatBorder", "Pmenu", "Terminal", "EndOfBuffer",
+		"FoldColumn", "Folded", "SignColumn", "LineNr", "CursorLineNr",
+		"TelescopeBorder", "TelescopeNormal", "TelescopePromptBorder", "TelescopePromptTitle",
+		"NvimTreeNormal", "NvimTreeVertSplit", "NvimTreeEndOfBuffer",
+	}
+	for _, group in ipairs(transparent) do
+		local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = group, link = false })
+		if ok then
+			hl.bg = nil
+			vim.api.nvim_set_hl(0, group, hl)
+		end
+	end
 end
 
 return {
