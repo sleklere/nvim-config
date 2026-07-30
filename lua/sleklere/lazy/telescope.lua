@@ -1,7 +1,8 @@
 return {
     "nvim-telescope/telescope.nvim",
 
-    branch = "0.1.x",
+    -- 0.1.x usa la API vieja de nvim-treesitter (master) en el previewer
+    branch = "master",
 
     dependencies = {
         "nvim-lua/plenary.nvim"
