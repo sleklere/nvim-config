@@ -94,11 +94,8 @@ return {
                     }
                 end,
 
-                ["jdtls"] = function()
-                    require("lspconfig").jdtls.setup({
-                        capabilities = capabilities,
-                    })
-                end,
+                -- jdtls lo arranca nvim-jdtls desde after/ftplugin/java.lua
+                ["jdtls"] = function() end,
 
                 -- specific handler for gopls (replaces default)
                 ["gopls"] = function()

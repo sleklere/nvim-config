@@ -17,12 +17,24 @@ local cmd = {
   "--jvm-arg=-Xmx2g",
 }
 
--- Si necesitas un JDK concreto, descomenta:
--- vim.env.JAVA_HOME = "/usr/lib/jvm/java-21-openjdk"
+-- jdtls exige Java 21+ para correr; el JAVA_HOME del shell puede ser menor.
+-- Solo afecta al proceso del server: los proyectos siguen compilando con el
+-- runtime que elijan en `settings.java.configuration.runtimes`.
+local jdtls_java_home = "/usr/lib/jvm/java-21-openjdk"
 
 require("jdtls").start_or_attach({
   cmd = cmd,
+  cmd_env = { JAVA_HOME = jdtls_java_home },
   root_dir = root,
   capabilities = require("cmp_nvim_lsp").default_capabilities(),
-  settings = { java = {} },
+  settings = {
+    java = {
+      configuration = {
+        runtimes = {
+          { name = "JavaSE-17", path = "/usr/lib/jvm/java-17-openjdk" },
+          { name = "JavaSE-21", path = jdtls_java_home },
+        },
+      },
+    },
+  },
 })
