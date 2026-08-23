@@ -1,6 +1,26 @@
+-- Colorscheme del tema activo del sistema. Lo escribe theme.sh (repo dotfiles)
+-- en ~/.cache/theme/nvim-colorscheme. Antes theme.sh le hacia sed a ESTE
+-- archivo, que vive en otro repo: cambiar de tema ensuciaba nvim-config.
+local function theme_colorscheme()
+	local f = io.open(os.getenv("HOME") .. "/.cache/theme/nvim-colorscheme", "r")
+	if not f then
+		return nil
+	end
+	local name = f:read("l")
+	f:close()
+	if name == nil or name == "" then
+		return nil
+	end
+	return name
+end
+
 function ColorMyPencils(color)
-	color = color or "rose-pine"
-	vim.cmd.colorscheme(color)
+	color = color or theme_colorscheme() or "rose-pine"
+	-- Un colorscheme que no esta instalado no puede tumbar el arranque de nvim.
+	if not pcall(vim.cmd.colorscheme, color) then
+		vim.notify("colorscheme '" .. color .. "' no disponible, usando rose-pine", vim.log.levels.WARN)
+		vim.cmd.colorscheme("rose-pine")
+	end
 
 	local transparent = {
 		"Normal", "NormalFloat", "NormalNC",
@@ -127,6 +147,21 @@ return {
                 background = "hard",
                 transparent_background_level = 2,
                 italics = false,
+            })
+        end
+    },
+
+    {
+        "rebelot/kanagawa.nvim",
+        name = "kanagawa",
+        config = function()
+            -- Registra kanagawa-wave / -dragon / -lotus como colorschemes.
+            -- theme.sh pide "kanagawa-dragon", que es el que matchea el tema de
+            -- alacritty.
+            require("kanagawa").setup({
+                transparent = true,
+                commentStyle = { italic = false },
+                keywordStyle = { italic = false },
             })
         end
     },
