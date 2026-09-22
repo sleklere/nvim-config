@@ -5,9 +5,19 @@ return {
     'SmiteshP/nvim-navic',
   },
   config = function()
+    -- Leer theme desde el cache del theme switcher (igual que colors.lua)
+    local function theme_colorscheme()
+      local f = io.open(os.getenv("HOME") .. "/.cache/theme/nvim-colorscheme", "r")
+      if not f then return nil end
+      local name = f:read("l")
+      f:close()
+      if name == nil or name == "" then return nil end
+      return name
+    end
+
     require('lualine').setup({
       options = {
-        theme = 'rose-pine',
+        theme = LualineTheme(theme_colorscheme() or 'rose-pine'),
         section_separators = { left = '', right = '' },
         component_separators = { left = '', right = '' },
       },

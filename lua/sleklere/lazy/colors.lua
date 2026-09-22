@@ -14,12 +14,28 @@ local function theme_colorscheme()
 	return name
 end
 
+-- Theme de lualine para un colorscheme. No todos tienen uno propio con el
+-- mismo nombre: rose-pine-moon/-dawn usan "rose-pine" y kanagawa-dragon usa
+-- "kanagawa", que siguen la variante activa. Se recorta desde el ultimo "-"
+-- hasta encontrar uno.
+function LualineTheme(color)
+	local name = color
+	while name do
+		if #vim.api.nvim_get_runtime_file("lua/lualine/themes/" .. name .. ".lua", false) > 0 then
+			return name
+		end
+		name = name:match("^(.+)-[^-]+$")
+	end
+	return "auto"
+end
+
 function ColorMyPencils(color)
 	color = color or theme_colorscheme() or "rose-pine"
 	-- Un colorscheme que no esta instalado no puede tumbar el arranque de nvim.
 	if not pcall(vim.cmd.colorscheme, color) then
 		vim.notify("colorscheme '" .. color .. "' no disponible, usando rose-pine", vim.log.levels.WARN)
 		vim.cmd.colorscheme("rose-pine")
+		color = "rose-pine"
 	end
 
 	local transparent = {
@@ -35,6 +51,17 @@ function ColorMyPencils(color)
 			hl.bg = nil
 			vim.api.nvim_set_hl(0, group, hl)
 		end
+	end
+
+	-- Recargar lualine con el theme nuevo
+	local ok_lualine, lualine = pcall(require, "lualine")
+	if ok_lualine then
+		-- setup() reemplaza la config entera: partir de la actual para no perder
+		-- las secciones de lualine.lua.
+		local config = lualine.get_config()
+		config.options.theme = LualineTheme(color)
+		lualine.setup(config)
+		vim.cmd("redrawstatus")
 	end
 end
 
