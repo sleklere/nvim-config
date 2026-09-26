@@ -167,6 +167,12 @@ return {
     },
 
     {
+        "EdenEast/nightfox.nvim",
+        lazy = false,
+        priority = 1000,
+    },
+
+    {
         "neanias/everforest-nvim",
         name = "everforest",
         config = function()
