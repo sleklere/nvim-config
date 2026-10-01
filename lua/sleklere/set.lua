@@ -36,3 +36,20 @@ vim.opt.colorcolumn = "80"
 vim.g.mapleader = " "
 
 vim.opt.clipboard = 'unnamedplus'
+
+-- Dentro de herdr el pane hereda el WAYLAND_DISPLAY del server, no el de la
+-- maquina desde la que estoy conectado: wl-copy copiaria en el clipboard
+-- remoto. OSC 52 viaja por la terminal hasta el cliente que tengo adelante.
+-- Pegar no usa OSC 52 porque alacritty no responde lecturas: sale del
+-- registro de nvim, y lo externo se pega con ctrl+shift+v.
+if os.getenv('HERDR_PANE_ID') then
+    local osc52 = require('vim.ui.clipboard.osc52')
+    local function paste()
+        return { vim.fn.split(vim.fn.getreg(''), '\n'), vim.fn.getregtype('') }
+    end
+    vim.g.clipboard = {
+        name = 'osc52',
+        copy = { ['+'] = osc52.copy('+'), ['*'] = osc52.copy('*') },
+        paste = { ['+'] = paste, ['*'] = paste },
+    }
+end
